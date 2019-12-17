@@ -1,5 +1,5 @@
 """
-StationPointsAndCrossSections.py
+station_points_and_cross_sections.py
 
 Generates station points at equal interval along a line,
 and creates cross sections of a specified width at the station point
@@ -96,7 +96,7 @@ def create_point_event_table(in_routes, route_id_field_name, measure_interval, o
     Measure Field - A field containing measure values. This field is numeric.
     The value is populated from geometry.firstPoint.M to geometry.lastPoint.M
     stepping by measure_interval
-    """    
+    """
     # get infomation about the route_id field
     route_id_field = get_field(in_routes, route_id_field_name)
     route_id_field_type = route_id_field.type
@@ -106,7 +106,7 @@ def create_point_event_table(in_routes, route_id_field_name, measure_interval, o
     path, name = os.path.split(out_table)
     arcpy.management.CreateTable(path, name)
     arcpy.management.AddField(out_table, route_id_field_name, route_id_field_type,
-                                field_length=route_id_field_length)
+                              field_length=route_id_field_length)
     arcpy.management.AddField(out_table, 'Measure', "DOUBLE")
 
     # Populate event table using cursors
@@ -121,7 +121,7 @@ def create_point_event_table(in_routes, route_id_field_name, measure_interval, o
                 for measure in frange(first_measure, last_measure, measure_interval):
                     icursor.insertRow((row[0], measure))
 
-    return out_table  
+    return out_table
 
 
 def create_route_by_length(in_features, route_id_field, route_feature_class):
@@ -184,8 +184,8 @@ def create_cross_section(station_feature_class, route_id_field_name, cross_secti
     distance = cross_section_width/2.0
 
     search_fields = ["SHAPE@XY", route_id_field_name, 'Measure', 'LOC_ANGLE']
-    insert_fields = ["SHAPE@", route_id_field_name, 'Measure'] 
-    sql_clause=(None, 'ORDER BY {}, Measure'.format(route_id_field_name))
+    insert_fields = ["SHAPE@", route_id_field_name, 'Measure']
+    sql_clause = (None, 'ORDER BY {}, Measure'.format(route_id_field_name))
     with arcpy.da.InsertCursor(out_cross_section_feature_class, insert_fields) as icursor:
         with arcpy.da.SearchCursor(station_feature_class, search_fields, sql_clause=sql_clause) as cursor:
             for row in cursor:
@@ -326,11 +326,13 @@ class StationPointsAndCrossSections(object):
         arcpy.env.overwriteOutput = True
 
         # Create route from polyline by length
-        create_route_by_length(in_features=in_line_features,route_id_field=route_id_field,route_feature_class=out_route_feature_class)
+        create_route_by_length(in_features=in_line_features, route_id_field=route_id_field,
+                               route_feature_class=out_route_feature_class)
         # Create a unique in_memory name
         event_tbl = arcpy.CreateUniqueName('event_table', 'in_memory')
-        
-        create_point_event_table(out_route_feature_class, route_id_field_name=route_id_field, measure_interval=station_interval, out_table=event_tbl)
+
+        create_point_event_table(out_route_feature_class, route_id_field_name=route_id_field,
+                                 measure_interval=station_interval, out_table=event_tbl)
 
         # locate points along route
         event_properties = '{} {} {}'.format(route_id_field, "POINT", 'Measure')
@@ -346,6 +348,6 @@ class StationPointsAndCrossSections(object):
         arcpy.management.CopyFeatures('Point Events', out_station_feature_class)
         #Create x section
         create_cross_section(out_station_feature_class, route_id_field, cross_section_width, out_cross_section_feature_class)
-        
+
         return
      

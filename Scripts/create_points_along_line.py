@@ -1,5 +1,5 @@
 """
-createPointsAlongLine.py
+create_points_along_line.py
 
 Generates station points at equal interval along a line,
 from an input polyline feature class.

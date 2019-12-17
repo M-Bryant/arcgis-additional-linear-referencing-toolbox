@@ -1,4 +1,5 @@
 """
+create_point_event_table.py
 Create point event table, suitable for input to Locate Features Along Route tool
 
 The Event Table has two fields:
@@ -41,7 +42,7 @@ def create_point_event_table(in_routes, route_id_field_name, measure_interval, o
     Measure Field - A field containing measure values. This field is numeric.
     The value is populated from geometry.firstPoint.M to geometry.lastPoint.M
     stepping by measure_interval
-    """    
+    """
     # get infomation about the route_id field
     route_id_field = get_field(in_routes, route_id_field_name)
     route_id_field_type = route_id_field.type
@@ -51,7 +52,7 @@ def create_point_event_table(in_routes, route_id_field_name, measure_interval, o
     path, name = os.path.split(out_table)
     arcpy.management.CreateTable(path, name)
     arcpy.management.AddField(out_table, route_id_field_name, route_id_field_type,
-                                field_length=route_id_field_length)
+                              field_length=route_id_field_length)
     arcpy.management.AddField(out_table, 'Measure', "DOUBLE")
 
     # Populate event table using cursors
@@ -66,7 +67,7 @@ def create_point_event_table(in_routes, route_id_field_name, measure_interval, o
                 for measure in frange(first_measure, last_measure, measure_interval):
                     icursor.insertRow((row[0], measure))
 
-    return out_table                    
+    return out_table
 
 class CreatePointEventTable(object):
     def __init__(self):

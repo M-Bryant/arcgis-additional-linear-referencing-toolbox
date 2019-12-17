@@ -21,11 +21,11 @@ sys.path.append(SCRIPTPATH)
 sys.dont_write_bytecode = True
 
 # Import the tool
-from createPointEventTable import CreatePointEventTable
-from createLineEventTable import CreateLineEventTable
-from createRouteByLength import CreateRouteByLength
-from createPointsAlongLine import PointsAlongLine
-from stationPointsAndCrossSections import StationPointsAndCrossSections
+from create_point_event_table import CreatePointEventTable
+from create_line_event_table import CreateLineEventTable
+from create_route_by_length import CreateRouteByLength
+from create_points_along_line import PointsAlongLine
+from station_points_and_cross_sections import StationPointsAndCrossSections
 
 del SCRIPTPATH
 

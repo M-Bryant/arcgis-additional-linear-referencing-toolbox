@@ -1,5 +1,5 @@
 """
-createLineEventTable.py
+create_line_event_table.py
 Create an linear event table, suitable for input to Locate Features Along Route tool.
 The Event Table has three fields:
 Route Identifier Field-The field containing values that indicate the route on which each event is located.  This field can be numeric or character.
